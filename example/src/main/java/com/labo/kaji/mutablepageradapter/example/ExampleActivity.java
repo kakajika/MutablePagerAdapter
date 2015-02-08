@@ -23,7 +23,7 @@ public class ExampleActivity extends ActionBarActivity implements View.OnClickLi
         setContentView(R.layout.activity_example);
 
         // Pager
-        mPager = (ViewPager)findViewById(R.id.pager);
+        mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new MutableTitlePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setOnPageChangeListener(mPagerListener);
@@ -33,7 +33,7 @@ public class ExampleActivity extends ActionBarActivity implements View.OnClickLi
         mPagerAdapter.addPageFragment(ExamplePageFragment.newInstance(null));
 
         // Sliding tabs example
-        mTabs = (PagerSlidingTabStrip)findViewById(R.id.tabs);
+        mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         mTabs.setViewPager(mPager);
         mTabs.setOnPageChangeListener(mPagerListener);
         mPagerAdapter.setTabStrip(mTabs);
@@ -57,7 +57,7 @@ public class ExampleActivity extends ActionBarActivity implements View.OnClickLi
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
             if (mPager.getCurrentItem() > 0 && mPagerAdapter.getCount() > 0) {
-                mPager.setCurrentItem(mPager.getCurrentItem()-1, true);
+                mPager.setCurrentItem(mPager.getCurrentItem() - 1, true);
                 return true;
             }
         }
@@ -78,7 +78,7 @@ public class ExampleActivity extends ActionBarActivity implements View.OnClickLi
             if (mPageChanging && state == ViewPager.SCROLL_STATE_SETTLING) {
                 int position = mPager.getCurrentItem();
 
-                if (position >= mPagerAdapter.getCount()-1) {
+                if (position >= mPagerAdapter.getCount() - 1) {
                     return;
                 }
 
@@ -108,7 +108,7 @@ public class ExampleActivity extends ActionBarActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.button1:
                 mPagerAdapter.addPageFragment(ExamplePageFragment.newInstance(null));
-                mPager.setCurrentItem(mPagerAdapter.getCount()-1);
+                mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
                 break;
             case R.id.button2:
                 mPagerAdapter.insertPageFragment(ExamplePageFragment.newInstance(null), pageIndex);
@@ -117,7 +117,7 @@ public class ExampleActivity extends ActionBarActivity implements View.OnClickLi
                 mPagerAdapter.replacePageFragment(ExamplePageFragment.newInstance(null), pageIndex);
                 break;
             case R.id.button4:
-                if (pageIndex == mPagerAdapter.getCount()-1) {
+                if (pageIndex == mPagerAdapter.getCount() - 1) {
                     mPagerListener.setPageAnimationListener(new PageAnimationListener() {
                         @Override
                         public void onPageAnimationEnd() {
@@ -125,13 +125,13 @@ public class ExampleActivity extends ActionBarActivity implements View.OnClickLi
                             mPagerAdapter.removePageFragment(pageIndex);
                         }
                     });
-                    mPager.setCurrentItem(pageIndex-1, true);
+                    mPager.setCurrentItem(pageIndex - 1, true);
                 } else {
                     mPagerAdapter.removePageFragment(pageIndex);
                 }
                 break;
             case R.id.button5:
-                if (pageIndex == mPagerAdapter.getCount()-1) {
+                if (pageIndex == mPagerAdapter.getCount() - 1) {
                     mPagerListener.setPageAnimationListener(new PageAnimationListener() {
                         @Override
                         public void onPageAnimationEnd() {
@@ -139,7 +139,7 @@ public class ExampleActivity extends ActionBarActivity implements View.OnClickLi
                             mPagerAdapter.removeLastPageFragment();
                         }
                     });
-                    mPager.setCurrentItem(pageIndex-1, true);
+                    mPager.setCurrentItem(pageIndex - 1, true);
                 } else {
                     mPagerAdapter.removeLastPageFragment();
                 }
