@@ -9,13 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extended FragmentStatePagerAdapter for supporting dynamic change of page elements.
  *
  * @author kakajika
  */
-public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
+public class MutableStatePagerAdapter extends FragmentStatePagerAdapter implements IMutablePageControl {
 
     private final FragmentManager mFragmentManager;
     private final ArrayList<Page> mPageList = new ArrayList<Page>();
@@ -25,12 +26,7 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
         mFragmentManager = fm;
     }
 
-    /**
-     * Get page fragment at specific index,
-     *
-     * @param index
-     * @return Page fragment
-     */
+    @Override
     public Fragment getPageFragment(int index) {
         if (index < 0 || index >= mPageList.size()) {
             return null;
@@ -38,21 +34,12 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
         return mPageList.get(index).fragment;
     }
 
-    /**
-     * Search position of specific page fragment.
-     *
-     * @param fragment
-     * @return Position of fragment
-     */
+    @Override
     public int indexOfPageFragment(Fragment fragment) {
         return mPageList.indexOf(fragment);
     }
 
-    /**
-     * Add page fragment to last.
-     *
-     * @param fragment Page fragment to add
-     */
+    @Override
     public void addPageFragment(Fragment fragment) {
         if (fragment == null || mPageList.contains(fragment)) {
             return;
@@ -62,12 +49,21 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Insert page fragment into specific index.
-     *
-     * @param fragment Page fragment to insert
-     * @param index    Insert index
-     */
+    @Override
+    public void addPageFragments(List<Fragment> fragments) {
+        if (fragments == null || fragments.size() == 0) {
+            return;
+        }
+
+        for (Fragment fragment : fragments) {
+            if (!mPageList.contains(fragment)) {
+                mPageList.add(new Page(fragment));
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    @Override
     public void insertPageFragment(Fragment fragment, int index) {
         if (fragment == null || mPageList.contains(fragment)) {
             return;
@@ -86,12 +82,7 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Replace page fragment at specific index to new.
-     *
-     * @param fragment New page fragment
-     * @param index    Replace index
-     */
+    @Override
     public void replacePageFragment(Fragment fragment, int index) {
         if (fragment == null || index < 0 || index >= mPageList.size()) {
             return;
@@ -106,9 +97,7 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Remove last page fragment,
-     */
+    @Override
     public void removeLastPageFragment() {
         if (mPageList.size() == 0) {
             return;
@@ -118,11 +107,7 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Remove page fragment at specific index.
-     *
-     * @param index Remove index
-     */
+    @Override
     public void removePageFragment(int index) {
         if (index < 0 || index >= mPageList.size()) {
             return;
@@ -138,11 +123,7 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Remove specific page fragment.
-     *
-     * @param fragment Page fragment to remove
-     */
+    @Override
     public void removePageFragment(Fragment fragment) {
         if (fragment == null || !mPageList.contains(fragment)) {
             return;
@@ -161,9 +142,7 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    /**
-     * Remove all page fragment.
-     */
+    @Override
     public void clearAllPageFragments() {
         mPageList.clear();
         notifyDataSetChanged();
@@ -212,6 +191,11 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
+        if (position >= getCount()) {
+            FragmentTransaction transaction = mFragmentManager.beginTransaction();
+            transaction.remove((Fragment) object);
+            transaction.commit();
+        }
         super.destroyItem(container, position, object);
     }
 

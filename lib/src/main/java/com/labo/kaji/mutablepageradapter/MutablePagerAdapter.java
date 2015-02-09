@@ -3,12 +3,13 @@ package com.labo.kaji.mutablepageradapter;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extended FragmentPagerAdapter for supporting dynamic change of page elements.
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * @deprecated This is experimental class.
  */
 @Deprecated
-public class MutablePagerAdapter extends FragmentStatePagerAdapter {
+public class MutablePagerAdapter extends FragmentPagerAdapter implements IMutablePageControl {
 
     private final FragmentManager mFragmentManager;
     private final ArrayList<Page> mPageList = new ArrayList<Page>();
@@ -27,12 +28,7 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
         mFragmentManager = fm;
     }
 
-    /**
-     * Get page fragment at specific index,
-     *
-     * @param index
-     * @return Page fragment
-     */
+    @Override
     public Fragment getPageFragment(int index) {
         if (index < 0 || index >= mPageList.size()) {
             return null;
@@ -40,21 +36,12 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
         return mPageList.get(index).fragment;
     }
 
-    /**
-     * Search position of specific page fragment.
-     *
-     * @param fragment
-     * @return Position of fragment
-     */
+    @Override
     public int indexOfPageFragment(Fragment fragment) {
         return mPageList.indexOf(fragment);
     }
 
-    /**
-     * Add page fragment to last.
-     *
-     * @param fragment Page fragment to add
-     */
+    @Override
     public void addPageFragment(Fragment fragment) {
         if (fragment == null || mPageList.contains(fragment)) {
             return;
@@ -64,12 +51,21 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Insert page fragment into specific index.
-     *
-     * @param fragment Page fragment to insert
-     * @param index    Insert index
-     */
+    @Override
+    public void addPageFragments(List<Fragment> fragments) {
+        if (fragments == null || fragments.size() == 0) {
+            return;
+        }
+
+        for (Fragment fragment : fragments) {
+            if (!mPageList.contains(fragment)) {
+                mPageList.add(new Page(fragment));
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    @Override
     public void insertPageFragment(Fragment fragment, int index) {
         if (fragment == null || mPageList.contains(fragment)) {
             return;
@@ -88,12 +84,7 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Replace page fragment at specific index to new.
-     *
-     * @param fragment New page fragment
-     * @param index    Replace index
-     */
+    @Override
     public void replacePageFragment(Fragment fragment, int index) {
         if (fragment == null || index < 0 || index >= mPageList.size()) {
             return;
@@ -108,9 +99,7 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Remove last page fragment,
-     */
+    @Override
     public void removeLastPageFragment() {
         if (mPageList.size() == 0) {
             return;
@@ -120,31 +109,26 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /**
-     * Remove page fragment at specific index.
-     *
-     * @param index Remove index
-     */
+    @Override
     public void removePageFragment(int index) {
         if (index < 0 || index >= mPageList.size()) {
             return;
         }
 
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
         for (int i = index; i < mPageList.size(); ++i) {
             Page page = mPageList.get(i);
             if (page.fragment.isAdded()) {
                 page.position = -1;
+                transaction.detach(page.fragment);
             }
         }
+        transaction.commit();
         mPageList.remove(index);
         notifyDataSetChanged();
     }
 
-    /**
-     * Remove specific page fragment.
-     *
-     * @param fragment Page fragment to remove
-     */
+    @Override
     public void removePageFragment(Fragment fragment) {
         if (fragment == null || !mPageList.contains(fragment)) {
             return;
@@ -152,20 +136,21 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
 
         final int index = mPageList.indexOf(fragment);
         if (index >= 0) {
+            FragmentTransaction transaction = mFragmentManager.beginTransaction();
             for (int i = index; i < mPageList.size(); ++i) {
                 Page page = mPageList.get(i);
                 if (page.fragment.isAdded()) {
                     page.position = -1;
+                    transaction.detach(page.fragment);
                 }
             }
+            transaction.commit();
             mPageList.remove(fragment);
             notifyDataSetChanged();
         }
     }
 
-    /**
-     * Remove all page fragment.
-     */
+    @Override
     public void clearAllPageFragments() {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         for (Page page : mPageList) {
@@ -195,6 +180,11 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public final int getCount() {
         return mPageList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mPageList.get(position).id;
     }
 
     @Override
@@ -255,13 +245,26 @@ public class MutablePagerAdapter extends FragmentStatePagerAdapter {
         return super.saveState();
     }
 
+    @Override
+    public void restoreState(Parcelable state, ClassLoader loader) {
+        super.restoreState(state, loader);
+    }
+
     private static class Page {
+        private static int sSerialNumber = 0;
+
         public final Fragment fragment;
         public int position;
+        public int id;
 
         public Page(Fragment fragment) {
             this.fragment = fragment;
             this.position = -1;
+            this.id = sSerialNumber++;
+        }
+
+        public static void resetSerialNumber() {
+            sSerialNumber = 0;
         }
 
         @Override
