@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Common interface of MutablePagerAdapter(s).
  */
-public interface IMutablePageControl {
+public interface MutablePageControl {
 
     /**
      * Get page fragment at specific index,

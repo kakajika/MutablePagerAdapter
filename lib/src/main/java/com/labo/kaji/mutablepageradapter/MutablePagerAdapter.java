@@ -18,7 +18,7 @@ import java.util.List;
  * @deprecated This is experimental class.
  */
 @Deprecated
-public class MutablePagerAdapter extends FragmentPagerAdapter implements IMutablePageControl {
+public class MutablePagerAdapter extends FragmentPagerAdapter implements MutablePageControl {
 
     private final FragmentManager mFragmentManager;
     private final ArrayList<Page> mPageList = new ArrayList<Page>();

@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author kakajika
  */
-public class MutableStatePagerAdapter extends FragmentStatePagerAdapter implements IMutablePageControl {
+public class MutableStatePagerAdapter extends FragmentStatePagerAdapter implements MutablePageControl {
 
     private final FragmentManager mFragmentManager;
     private final ArrayList<Page> mPageList = new ArrayList<Page>();
