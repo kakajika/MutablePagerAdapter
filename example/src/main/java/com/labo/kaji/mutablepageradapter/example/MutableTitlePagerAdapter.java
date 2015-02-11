@@ -8,7 +8,7 @@ import com.labo.kaji.mutablepageradapter.MutablePagerAdapter;
 import com.labo.kaji.mutablepageradapter.MutableStatePagerAdapter;
 
 /**
- * An example for using MutablePagerAdapter with PagerSlidingTabStrip.
+ * An example for using PagerSlidingTabStrip.
  */
 public class MutableTitlePagerAdapter extends MutableStatePagerAdapter {
 
@@ -33,6 +33,7 @@ public class MutableTitlePagerAdapter extends MutableStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment f = super.getItem(position);
+        // Notify page index changed to fragment.
         ((ExamplePageFragment) f).setPageIndex(position);
         return f;
     }
