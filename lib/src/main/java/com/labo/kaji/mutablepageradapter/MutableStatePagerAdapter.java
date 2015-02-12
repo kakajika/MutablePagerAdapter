@@ -1,10 +1,12 @@
 package com.labo.kaji.mutablepageradapter;
 
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,6 +19,7 @@ import java.util.List;
  * @author kakajika
  */
 public class MutableStatePagerAdapter extends FragmentStatePagerAdapter implements MutablePageControl {
+    private static final String TAG = "MutableStatePagerAdapter";
 
     private final FragmentManager mFragmentManager;
     private final ArrayList<Page> mPageList = new ArrayList<Page>();
@@ -224,7 +227,13 @@ public class MutableStatePagerAdapter extends FragmentStatePagerAdapter implemen
 
     @Override
     public Parcelable saveState() {
-        return super.saveState();
+        // do nothing.
+        return null;
+    }
+
+    @Override
+    public void restoreState(Parcelable state, ClassLoader loader) {
+        // do nothing.
     }
 
     private static class Page {
