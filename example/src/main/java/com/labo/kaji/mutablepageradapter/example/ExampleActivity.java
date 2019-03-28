@@ -1,8 +1,8 @@
 package com.labo.kaji.mutablepageradapter.example;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 
-public class ExampleActivity extends ActionBarActivity implements View.OnClickListener {
+public class ExampleActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ViewPager mPager;
     private MutableTitlePagerAdapter mPagerAdapter;

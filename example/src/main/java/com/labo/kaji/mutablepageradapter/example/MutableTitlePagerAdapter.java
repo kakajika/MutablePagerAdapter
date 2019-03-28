@@ -1,10 +1,9 @@
 package com.labo.kaji.mutablepageradapter.example;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.labo.kaji.mutablepageradapter.MutablePagerAdapter;
 import com.labo.kaji.mutablepageradapter.MutableStatePagerAdapter;
 
 /**
