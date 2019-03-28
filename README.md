@@ -1,6 +1,6 @@
 # MutablePagerAdapter
 An Android `FragmentPagerAdapter` extension supporting dynamic change of page elements for `ViewPager`.<br>
-Androidの`ViewPager`で動的にページを追加・削除・変更できる拡張`FragmentPagerAdapter`.
+Androidの`ViewPager`で動的にページを追加・削除・変更できる拡張`FragmentPagerAdapter`.<br>
 一个Android的ViewPager可动态添加、删除、替换操作Fragment的`FragmentPagerAdapter`
 
 ## Classes 相关类
@@ -19,7 +19,7 @@ pager.setAdapter(adapter);
 pager.addPageFragment(PageFragment.newInstance());
 ```
 
-### Use with [PagerSlidingTabStrip](https://github.com/astuetz/PagerSlidingTabStrip)
+### Use with [PagerSlidingTabStrip](https://github.com/astuetz/PagerSlidingTabStrip) 与 [PagerSlidingTabStrip](https://github.com/astuetz/PagerSlidingTabStrip) 一起使用
 
 See [MutableTitlePagerAdapter](example/src/main/java/com/labo/kaji/mutablepageradapter/example/MutableTitlePagerAdapter.java) in example.
 
