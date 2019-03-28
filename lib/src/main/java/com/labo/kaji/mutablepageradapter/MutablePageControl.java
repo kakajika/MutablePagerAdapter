@@ -1,11 +1,11 @@
 package com.labo.kaji.mutablepageradapter;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import java.util.List;
 
 /**
- * Common interface of MutablePagerAdapter(s).
+ * Common interface of MutableStatePagerAdapter(s).
  */
 public interface MutablePageControl {
 
